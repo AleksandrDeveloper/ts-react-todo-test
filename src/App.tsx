@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import NavBar from './Navbar';
+import ToDoForm from './ToDoForm';
+import ToDoList from './ToDoList';
+import { ITodos } from './Interface';
+ 
+const App:React.FC = () => {
+  const [todos, setTodos] = useState<ITodos[]>([])
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const addTodo=(title:string)=>{
+    const newItem:ITodos={
+      title,
+      id:Date.now(),
+      complited:false
+    }
+
+    setTodos(prev=>[newItem,...prev])
+  }
+
+  const complitedItem=(id:number)=>{
+    console.log('dd');
+     
+   const f = todos.map(i=>{
+      if(i.id===id){
+        i.complited = !i.complited
+      }
+      return i
+    })
+    setTodos([...f]) 
+  }
+  const deliteItem=(id:number)=>{
+    setTodos([...todos.filter(i=>i.id!==id)])
+  }
+
+
+  return(
+   <>
+   <NavBar />
+   <div className="container">
+     <ToDoForm addTodo={addTodo} />
+
+     <ToDoList todos={todos} complitedItem={complitedItem} deliteItem={deliteItem} />
+   </div>
+   </>
+  ) 
 }
 
-export default App;
+export default App
